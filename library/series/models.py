@@ -5,7 +5,7 @@ from django.db import models
 from common.models import *
 
 class Serie(ImdbItem):
-    short_title = models.CharField(max_length=40, blank=true)
+    short_title = models.CharField(max_length=40, blank=True)
 
     def get_canonical_tite(self):
         return '%s (%d)' % (self.title, self.year)
