@@ -1,18 +1,15 @@
 from django.contrib import admin
-from django.contrib.contenttypes import generic
 
-from models import *
+from common.admin import FileAdminInline
 from common.models import File
 
-class FileInline(generic.GenericTabularInline):
-    model = File
-    extra = 1
+from models import Episode, Serie
 
 class SerieAdmin(admin.ModelAdmin):
     pass
 
 class EpisodeAdmin(admin.ModelAdmin):
-    inlines = (FileInline,)
+    inlines = (FileAdminInline,)
 
 admin.site.register(Serie, SerieAdmin)
 admin.site.register(Episode, EpisodeAdmin)

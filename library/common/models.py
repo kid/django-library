@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
+import fields
 import settings
 
 def clean_filename(filename):
@@ -49,7 +50,7 @@ class File(DatedItem):
     object_id = models.PositiveIntegerField()
     content_type = models.ForeignKey(ContentType)
     content_object = generic.GenericForeignKey('content_type', 'object_id')
-    file_path = models.FilePathField(path=settings.LIBRARY_ROOT, match=r'^[^\.]', max_length=1024)
+    file_path = models.CharField(max_length=1024)
 
     def __unicode__(self):
         return u'%s' % self.file_path
