@@ -23,7 +23,7 @@ else:
     DATABASE_PORT = '5678'
     LIBRARY_ROOT = '/data/Library'
 
-TIME_ZONE = 'Europe/Brussel'
+TIME_ZONE = 'Europe/Brussels'
 
 LANGUAGE_CODE = 'fr-be'
 
