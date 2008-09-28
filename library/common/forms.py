@@ -3,7 +3,7 @@ import os, re
 from django import forms
 from django.forms.util import ErrorList
 
-from models import File
+from common.models import File
 
 import settings
 
