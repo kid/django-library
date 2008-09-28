@@ -1,31 +1,31 @@
-# Django settings for library project.
+import os, platform
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+DEVELOPMENT_MODE = (platform.node() != 'nas')
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    ('Arnaud Rebts', 'arnaud.rebts@gmail.com'),
 )
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = ''           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = ''             # Or path to database file if using sqlite3.
-DATABASE_USER = ''             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+if DEVELOPMENT_MODE:
+    DEBUG = True
+    TEMPLATE_DEBUG = DEBUG
+    DATABASE_ENGINE = 'sqlite3'
+    DATABASE_NAME = 'dev.sqlite3'
+    LIBRARY_ROOT = '/Users/kid/Movies/'
+else:
+    DATABASE_ENGINE = 'postgresql_psycopg2'
+    DATABASE_NAME = 'new-library'
+    DATABASE_USER = 'django'
+    DATABASE_PASSWORD = ''
+    DATABASE_HOST = '127.0.0.1'
+    DATABASE_PORT = '5678'
+    LIBRARY_ROOT = '/data/Library'
 
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# If running in a Windows environment this must be set to the same as your
-# system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/Brussel'
 
-# Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-be'
 
 SITE_ID = 1
 
@@ -73,7 +73,10 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
     'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'common',
+    'series',
 )
