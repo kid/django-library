@@ -21,7 +21,7 @@ else:
     DATABASE_PASSWORD = ''
     DATABASE_HOST = '127.0.0.1'
     DATABASE_PORT = '5678'
-    LIBRARY_ROOT = '/data/Library'
+    LIBRARY_ROOT = '/data/Library/'
 
 TIME_ZONE = 'Europe/Brussels'
 
@@ -45,7 +45,7 @@ MEDIA_URL = ''
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/media/admin/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'jagz76z&zffejk(+hdbmn*9!f6a59-7_q97zsadzm3z_qo*t&z'
