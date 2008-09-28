@@ -4,7 +4,6 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
-import common.fields
 import settings
 
 def clean_filename(filename):
