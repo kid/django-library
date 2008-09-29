@@ -10,11 +10,11 @@ MANAGERS = ADMINS
 
 if DEVELOPMENT_MODE:
     DEBUG = True
-    TEMPLATE_DEBUG = DEBUG
     DATABASE_ENGINE = 'sqlite3'
     DATABASE_NAME = 'dev.sqlite3'
     LIBRARY_ROOT = '/Users/kid/Movies/'
 else:
+    DEBUG = False
     DATABASE_ENGINE = 'postgresql_psycopg2'
     DATABASE_NAME = 'new-library'
     DATABASE_USER = 'django'
@@ -22,6 +22,7 @@ else:
     DATABASE_HOST = '127.0.0.1'
     DATABASE_PORT = '5678'
     LIBRARY_ROOT = '/data/Library/'
+TEMPLATE_DEBUG = DEBUG
 
 TIME_ZONE = 'Europe/Brussels'
 
@@ -61,6 +62,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.transaction.TransactionMiddleware',
 )
 
 ROOT_URLCONF = 'library.urls'
