@@ -1,28 +1,45 @@
 from os import path
+from tvdb_api import Tvdb
 
 from django.db import models
 
 from common.models import *
 
-class Serie(ImdbItem):
+class TvdbItem(DatedItem):
+    title = models.CharField(max_length=1024)
+    tvdb_id = models.PositiveIntegerField(blank=True, null=True)
+
+    class Meta:
+        abstract = True
+
+class Serie(TvdbItem):
     short_title = models.CharField(max_length=40, blank=True)
-    tvdb_id = models.PositiveIntegerField(blank=True, null=True)
 
-    def get_canonical_tite(self):
-        return '%s (%d)' % (self.title, self.year)
+    def __unicode__(self):
+        return self.title
 
+    def save(self, force_insert=False, force_update=False):
+        if not self.tvdb_id:
+            t = Tvdb()
+            self.id = t[self.title].data['sid']
+        super(Serie, self).save(force_insert, force_update)
+        
     def get_path(self):
-        return path.join('Series', self.get_canonical_tite())
+        return path.join('Series', self.title)
 
-class Episode(ImdbItem, DatedItem):
+class Episode(TvdbItem):
     serie = models.ForeignKey(Serie)
-    tvdb_id = models.PositiveIntegerField(blank=True, null=True)
     season_number = models.PositiveSmallIntegerField()
     episode_number = models.PositiveSmallIntegerField()
     last_episode_number = models.PositiveSmallIntegerField(blank=True, null=True)
 
     def __unicode__(self):
         return self.get_canonical_tite()
+
+    def save(self, force_insert=False, force_update=False):
+        if not self.tvdb_id:
+            pass
+        super(Episode, self).save(force_insert, force_update)
 
     def get_episode_number(self):
         if self.last_episode_number:
