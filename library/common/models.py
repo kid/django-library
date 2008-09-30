@@ -69,4 +69,4 @@ class File(DatedItem):
     def save(self, force_insert=False, force_update=False):
         if not self.pk:
             self._move()
-        super(File, self).save(force_insert=False, force_update=False)
+        super(File, self).save(force_insert, force_update)
