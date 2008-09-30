@@ -1,18 +1,13 @@
 from os import path
-from tvdb_api import Tvdb
+from tvdb_api import *
 
 from django.db import models
 
 from common.models import *
 
-class TvdbItem(DatedItem):
+class Serie(DatedItem):
     title = models.CharField(max_length=1024)
     tvdb_id = models.PositiveIntegerField(blank=True, null=True)
-
-    class Meta:
-        abstract = True
-
-class Serie(TvdbItem):
     short_title = models.CharField(max_length=40, blank=True)
 
     def __unicode__(self):
@@ -21,24 +16,34 @@ class Serie(TvdbItem):
     def save(self, force_insert=False, force_update=False):
         if not self.tvdb_id:
             t = Tvdb()
-            self.id = t[self.title].data['sid']
+            self.tvdb_id = t[self.title].data['id']
         super(Serie, self).save(force_insert, force_update)
         
     def get_path(self):
         return path.join('Series', self.title)
 
-class Episode(TvdbItem):
+class Episode(DatedItem):
     serie = models.ForeignKey(Serie)
     season_number = models.PositiveSmallIntegerField()
     episode_number = models.PositiveSmallIntegerField()
     last_episode_number = models.PositiveSmallIntegerField(blank=True, null=True)
+    title = models.CharField(blank=True, max_length=1024)
+    tvdb_id = models.PositiveIntegerField(blank=True, null=True)
 
     def __unicode__(self):
         return self.get_canonical_tite()
 
     def save(self, force_insert=False, force_update=False):
-        if not self.tvdb_id:
-            pass
+        if not self.title or not self.tvdb_id:
+            t = Tvdb()
+            e = t[self.serie.title][self.season_number][self.episode_number]
+            if not self.title:
+                self.title = e['episodename']
+            if not self.tvdb_id:
+                try:
+                    self.tvdb_id = e['id']
+                except tvdb_episodenotfound:
+                    pass
         super(Episode, self).save(force_insert, force_update)
 
     def get_episode_number(self):
