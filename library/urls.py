@@ -13,4 +13,5 @@ admin.autodiscover()
 urlpatterns = patterns('',
     (r'^admin/(.*)', admin.site.root),
     (r'^databrowse/(.*)', databrowse.site.root),
+    (r'^api/', include('api.urls'))
 )
