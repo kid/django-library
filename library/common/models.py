@@ -60,6 +60,8 @@ class File(DatedItem):
 
     def _move(self):
         new_name = clean_filename(self.get_new_name())
+        if os.access(os.path.join(settings.LIBRARY_ROOT, new_name), os.F_OK):
+            raise OSError
         os.renames(
             os.path.join(settings.LIBRARY_ROOT, self.file_path),
             os.path.join(settings.LIBRARY_ROOT, new_name)
@@ -69,4 +71,4 @@ class File(DatedItem):
     def save(self, force_insert=False, force_update=False):
         if not self.pk:
             self._move()
-        super(File, self).save(force_insert=False, force_update=False)
+        super(File, self).save(force_insert, force_update)
