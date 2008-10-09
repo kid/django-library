@@ -21,6 +21,9 @@ class Episode(ImdbItem, DatedItem):
     episode_number = models.PositiveSmallIntegerField()
     last_episode_number = models.PositiveSmallIntegerField(blank=True, null=True)
 
+    class Meta:
+        unique_together = (('serie', 'season_number', 'episode_number', 'last_episode_number'),)
+
     def __unicode__(self):
         return self.get_canonical_tite()
 
