@@ -12,7 +12,7 @@ if DEVELOPMENT_MODE:
     DEBUG = True
     DATABASE_ENGINE = 'sqlite3'
     DATABASE_NAME = 'dev.sqlite3'
-    LIBRARY_ROOT = '/Users/kid/Movies/'
+    LIBRARY_ROOT = u'/Users/kid/Movies/'
 else:
     DEBUG = False
     DATABASE_ENGINE = 'postgresql_psycopg2'
@@ -21,7 +21,7 @@ else:
     DATABASE_PASSWORD = ''
     DATABASE_HOST = '127.0.0.1'
     DATABASE_PORT = '5678'
-    LIBRARY_ROOT = '/data/Library/'
+    LIBRARY_ROOT = u'/data/Library/'
 TEMPLATE_DEBUG = DEBUG
 
 TIME_ZONE = 'Europe/Brussels'
