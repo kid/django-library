@@ -58,6 +58,7 @@ def parse_filename(filename, verbose=False):
         match = r.match(filename)
         if match:
             serie_name, season_number, episode_number = match.groups()
+            serie_name = re.sub("[\._]|\-(?=$)", " ", serie_name).strip()
             if verbose:
                 print u'=' * 80
                 print u'File name: ', filename
