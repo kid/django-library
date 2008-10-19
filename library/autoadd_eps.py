@@ -39,6 +39,7 @@ config['name_parse'] = [
 ]
 
 config['verbose'] = True
+config['interactive'] = True
 
 def ask(question):
     answer = None
@@ -70,10 +71,10 @@ def parse_filename(filename, verbose=False):
     else:
         print 'Invalid name: ', filename
 
-def process_file(filename):
+def process_file(filename, interactive=False):
     ep = parse_filename(filename, True)
     if ep is not None:
-        if ask(u'Continue?') in ['y', '']:
+        if not interactive or ask(u'Continue?') in ['y', '']:
             serie_name, season_number, episode_number = ep
             serie = Serie.objects.get(title__iexact=serie_name)
             if serie:
@@ -84,15 +85,19 @@ def process_file(filename):
             else:
                 print u'Could not find serie in database.'
 
-def process_files(files):
+def process_files(files, interactive=False):
+    print interactive
     for file in files:
-        answer = ask(u'Process %s ?' % file)
-        if answer == 'y' or answer == '':
-            process_file(file)
-        elif answer == 'n':
-            continue
-        elif answer == 'q':
-            sys.exit(0)
+        if not interactive:
+            process_file(file, interactive)
+        else:
+            answer = ask(u'Process %s ?' % file)
+            if answer == 'y' or answer == '':
+                process_file(file, interactive)
+            elif answer == 'n':
+                continue
+            elif answer == 'q':
+                sys.exit(0)
 
 def find_files(path=settings.LIBRARY_ROOT, match=None):
     files = []
@@ -104,5 +109,14 @@ def find_files(path=settings.LIBRARY_ROOT, match=None):
             files.append(f)
     return files
 
+def main():
+    from optparse import OptionParser
+
+    parser = OptionParser(usage="%prog [options]")
+    parser.add_option("-i", "--interactive", action="store_true", dest="interactive", default=False,
+        help="interactivly select correct show from search results [default]")
+    opts, args = parser.parse_args()
+    process_files(find_files(match=r'^[^\.]'), interactive=opts.interactive)
+
 if __name__ == '__main__':
-    process_files(find_files(match=r'^[^\.]'))
+    main()
