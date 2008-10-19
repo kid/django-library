@@ -93,12 +93,15 @@ def process_files(files):
         elif answer == 'q':
             sys.exit(0)
 
-def find_files(directory=settings.LIBRARY_ROOT):
-    return [file for file in os.listdir(directory) if not os.path.isdir(file)]
+def find_files(path=settings.LIBRARY_ROOT, match=None):
+    files = []
+    if match is not None:
+        match_re = re.compile(match)
+    for f in os.listdir(path):
+        full_file = os.path.join(path, f)
+        if os.path.isfile(full_file) and (match is None or match_re.search(f)):
+            files.append(f)
+    return files
 
 if __name__ == '__main__':
-    eps = [
-        u'smallville.s03e22.ws.dvdrip.xvid-river.avi',
-        u'test.afq',
-    ]
-    process_files(find_files())
+    process_files(find_files(match=r'^[^\.]'))
