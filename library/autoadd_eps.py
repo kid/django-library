@@ -14,6 +14,8 @@ except ImportError:
 
 import tvdb
 
+# This part comes from dbr/Ben's tvnamer from http://github.com/dbr/tvdb_api
+
 config = {}
 
 # The format of the renamed files (with and without episode names)
