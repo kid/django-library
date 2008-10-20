@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # encoding:utf-8
 
 import os, sys, re
@@ -53,8 +54,12 @@ def ask(question):
         except KeyboardInterrupt, errormsg:
             print u'\n', errormsg
             sys.exit(1)
-    return answer
-            
+    if answer in ['y', '']:
+        return True
+    elif answer == 'q':
+        sys.exit(0)
+    else:
+        return False
 
 def parse_filename(filename, verbose=False):
     for r in config['name_parse']:
@@ -76,7 +81,7 @@ def parse_filename(filename, verbose=False):
 def process_file(filename, interactive=False):
     ep = parse_filename(filename, True)
     if ep is not None:
-        if not interactive or ask(u'Continue?') in ['y', '']:
+        if not interactive or ask(u'Continue?'):
             serie_name, season_number, episode_number = ep
             serie = Serie.objects.get(title__iexact=serie_name)
             if serie:
@@ -88,18 +93,14 @@ def process_file(filename, interactive=False):
                 print u'Could not find serie in database.'
 
 def process_files(files, interactive=False):
-    print interactive
     for file in files:
         if not interactive:
             process_file(file, interactive)
         else:
-            answer = ask(u'Process %s ?' % file)
-            if answer == 'y' or answer == '':
+            if ask(u'Process %s ?' % file):
                 process_file(file, interactive)
-            elif answer == 'n':
+            else:
                 continue
-            elif answer == 'q':
-                sys.exit(0)
 
 def find_files(path=settings.LIBRARY_ROOT, match=None):
     files = []
