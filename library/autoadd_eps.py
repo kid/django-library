@@ -83,8 +83,9 @@ def process_file(filename, interactive=False):
     if ep is not None:
         if not interactive or ask(u'Continue?'):
             serie_name, season_number, episode_number = ep
-            serie = Serie.objects.get(title__iexact=serie_name)
-            if not serie:
+            try:
+                serie = Serie.objects.get(title__iexact=serie_name)
+            except Serie.DoesNotExist
                 serie = Serie.objects.get(short_title__iexact=serie_name)
             if serie:
                 episode = Episode(serie_id=serie.id, season_number=season_number, episode_number=episode_number)
