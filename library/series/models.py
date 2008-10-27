@@ -49,13 +49,13 @@ class Episode(DatedItem):
                     pass
         super(Episode, self).save(force_insert, force_update)
 
-    def get_episode_number(self):
+    def full_ep_number(self):
         if self.last_episode_number:
             return u'S%02dE%02d-%02d' % (self.season_number, self.episode_number, self.last_episode_number)
         return u'S%02dE%02d' % (self.season_number, self.episode_number)
 
     def get_canonical_tite(self):
-        return u'%s - %s - %s' % (self.serie.short_title or self.serie.title, self.get_episode_number(), self.title)
+        return u'%s - %s - %s' % (self.serie.short_title or self.serie.title, self.full_ep_number(), self.title)
 
     def get_path(self):
         return path.join(self.serie.get_path(), u'Season %d' % self.season_number, self.get_canonical_tite())
