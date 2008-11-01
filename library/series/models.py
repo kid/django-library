@@ -12,7 +12,7 @@ class Serie(ImdbItem):
         return '%s (%d)' % (self.title, self.year)
 
     def get_path(self):
-        return path.join('Series', self.get_canonical_tite())
+        return path.join('Series', self.get_canonical_tite().replace('/', ' '))
 
 class Episode(ImdbItem, DatedItem):
     serie = models.ForeignKey(Serie)
@@ -36,4 +36,4 @@ class Episode(ImdbItem, DatedItem):
         return u'%s - %s - %s' % (self.serie.short_title or self.serie.title, self.full_ep_number(), self.title)
 
     def get_path(self):
-        return path.join(self.serie.get_path(), u'Season %d' % self.season_number, self.get_canonical_tite())
+        return path.join(self.serie.get_path(), u'Season %d' % self.season_number, self.get_canonical_tite().replace('/', ' '))

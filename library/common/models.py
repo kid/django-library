@@ -7,7 +7,7 @@ from django.contrib.contenttypes import generic
 import settings
 
 def clean_filename(filename):
-    return filename.replace(' : ', ' ').replace(': ', ' ').replace(':', ' ').replace('/', ' ')
+    return filename.replace(' : ', ' ').replace(': ', ' ').replace(':', ' ')
 
 FORMATS = (
     (0, 'SD'),
