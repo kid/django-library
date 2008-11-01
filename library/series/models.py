@@ -20,7 +20,7 @@ class Serie(DatedItem):
         super(Serie, self).save(force_insert, force_update)
         
     def get_path(self):
-        return path.join('Series', self.title)
+        return path.join('Series', self.title.replace('/', ' '))
 
 class Episode(DatedItem):
     serie = models.ForeignKey(Serie)
@@ -58,4 +58,4 @@ class Episode(DatedItem):
         return u'%s - %s - %s' % (self.serie.short_title or self.serie.title, self.full_ep_number(), self.title)
 
     def get_path(self):
-        return path.join(self.serie.get_path(), u'Season %d' % self.season_number, self.get_canonical_tite())
+        return path.join(self.serie.get_path(), u'Season %d' % self.season_number, self.get_canonical_tite().replace('/', ' '))
