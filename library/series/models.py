@@ -1,5 +1,6 @@
 from os import path
 
+from django.contrib.contenttypes import generic
 from django.db import models
 
 from common.models import *
@@ -20,6 +21,7 @@ class Episode(ImdbItem, DatedItem):
     season_number = models.PositiveSmallIntegerField()
     episode_number = models.PositiveSmallIntegerField()
     last_episode_number = models.PositiveSmallIntegerField(blank=True, null=True)
+    files = generic.GenericRelation(File)
 
     class Meta:
         unique_together = (('serie', 'season_number', 'episode_number', 'last_episode_number'),)
