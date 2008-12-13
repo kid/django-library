@@ -14,7 +14,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     (r'^admin/(.*)', admin.site.root),
-    (r'^databrowse/(.*)', databrowse.site.root),
 )
 
 if settings.DEBUG:

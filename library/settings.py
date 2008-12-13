@@ -1,6 +1,4 @@
-import os, platform
-
-DEVELOPMENT_MODE = (platform.node() != 'nas')
+import os
 
 ADMINS = (
     ('Arnaud Rebts', 'arnaud.rebts@gmail.com'),
@@ -8,25 +6,19 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-if DEVELOPMENT_MODE:
-    DEBUG = True
-    DATABASE_ENGINE = 'sqlite3'
-    DATABASE_NAME = 'dev.sqlite3'
-    LIBRARY_ROOT = u'/Users/kid/Movies/'
-else:
-    DEBUG = False
-    DATABASE_ENGINE = 'postgresql_psycopg2'
-    DATABASE_NAME = 'new-library'
-    DATABASE_USER = 'django'
-    DATABASE_PASSWORD = ''
-    DATABASE_HOST = '127.0.0.1'
-    DATABASE_PORT = '5678'
-    LIBRARY_ROOT = u'/data/Library/'
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+
+DATABASE_ENGINE = ''           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+DATABASE_NAME = ''             # Or path to database file if using sqlite3.
+DATABASE_USER = ''             # Not used with sqlite3.
+DATABASE_PASSWORD = ''         # Not used with sqlite3.
+DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
+DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 TIME_ZONE = 'Europe/Brussels'
 
-LANGUAGE_CODE = 'fr-be'
+LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
@@ -68,18 +60,20 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'library.urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(os.path.dirname(__file__), 'templates'),
 )
 
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.admin',
     'django.contrib.contenttypes',
-    'django.contrib.databrowse',
     'django.contrib.sessions',
     'django.contrib.sites',
     'common',
     'series',
 )
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
