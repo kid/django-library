@@ -1,33 +1,55 @@
 from os import path
+from tvdb_api import *
 
 from django.contrib.contenttypes import generic
 from django.db import models
 
 from common.models import *
 
-class Serie(ImdbItem):
+class Serie(DatedItem):
+    title = models.CharField(max_length=1024)
+    tvdb_id = models.PositiveIntegerField(blank=True, null=True)
     short_title = models.CharField(max_length=40, blank=True)
-    tvdb_id = models.PositiveIntegerField(blank=True, null=True)
 
-    def get_canonical_tite(self):
-        return '%s (%d)' % (self.title, self.year)
+    def __unicode__(self):
+        return self.title
 
+    def save(self, force_insert=False, force_update=False):
+        if not self.tvdb_id:
+            t = Tvdb()
+            self.tvdb_id = t[self.title].data['id']
+        super(Serie, self).save(force_insert, force_update)
+        
     def get_path(self):
-        return path.join('Series', self.get_canonical_tite().replace('/', ' '))
+        return path.join('Series', self.title.replace('/', ' '))
 
-class Episode(ImdbItem, DatedItem):
+class Episode(DatedItem):
     serie = models.ForeignKey(Serie)
-    tvdb_id = models.PositiveIntegerField(blank=True, null=True)
     season_number = models.PositiveSmallIntegerField()
     episode_number = models.PositiveSmallIntegerField()
     last_episode_number = models.PositiveSmallIntegerField(blank=True, null=True)
     files = generic.GenericRelation(File)
+    title = models.CharField(blank=True, max_length=1024)
+    tvdb_id = models.PositiveIntegerField(blank=True, null=True)
 
     class Meta:
         unique_together = (('serie', 'season_number', 'episode_number', 'last_episode_number'),)
 
     def __unicode__(self):
         return self.get_canonical_tite()
+
+    def save(self, force_insert=False, force_update=False):
+        if not self.title or not self.tvdb_id:
+            t = Tvdb()
+            e = t[self.serie.title][self.season_number][self.episode_number]
+            if not self.title:
+                self.title = e['episodename']
+            if not self.tvdb_id:
+                try:
+                    self.tvdb_id = e['id']
+                except tvdb_episodenotfound:
+                    pass
+        super(Episode, self).save(force_insert, force_update)
 
     def full_ep_number(self):
         if self.last_episode_number:
