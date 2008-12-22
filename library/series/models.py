@@ -35,9 +35,6 @@ class Episode(DatedItem):
     class Meta:
         unique_together = (('serie', 'season_number', 'episode_number', 'last_episode_number'),)
 
-    class Meta:
-        unique_together = (('serie', 'season_number', 'episode_number', 'last_episode_number'),)
-
     def __unicode__(self):
         return self.get_canonical_tite()
 
