@@ -88,8 +88,7 @@ def process_file(filename, interactive=False):
             except Serie.DoesNotExist:
                 serie = Serie.objects.get(short_title__iexact=serie_name)
             if serie:
-                episode = Episode(serie_id=serie.id, season_number=season_number, episode_number=episode_number)
-                episode.save()
+                episode = serie.episode_set.get_or_create(season_number=season_number, episode_number=episode_number)
                 file = File(file_path=filename, content_object=episode)
                 file.save()
             else:
