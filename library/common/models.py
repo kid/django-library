@@ -55,7 +55,9 @@ class File(DatedItem):
         return u'%s' % self.file_path
 
     def get_new_name(self):
-        ext = re.match(r'^.+\.([^.]+)$', self.file_path).group(1)
+        ext = re.match(r'^.+\.((en|fr)\.[^.]+)$', self.file_path).group(1)
+        if not ext:
+            ext = re.match(r'^.+\.([^.]+)$', self.file_path).group(1)
         return u'%s.%s' % (self.content_object.get_path(), ext)
 
     def _move(self):
